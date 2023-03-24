@@ -1,25 +1,19 @@
 import logo from './logo.svg';
 import './App.css';
+import ThemeCustomization from './themes';
+import ScrollTop from './components/ScrollTop';
+import Routes from './routes';
 
-function App() {
+const App = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+      <ThemeCustomization>
+        <ScrollTop>
+          <Routes />
+        </ScrollTop>
+      </ThemeCustomization>
+  )
+
+};
 
 export default App;
