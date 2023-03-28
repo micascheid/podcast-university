@@ -7,7 +7,7 @@ const DefaultDashboard = () => {
 
     return (
         <div>
-            Putting stiff in here
+            Putting stuff in here
         </div>
     );
 };

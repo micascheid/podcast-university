@@ -7,9 +7,9 @@ import { Grid, Stack, Typography } from '@mui/material';
 
 // npm install @mui/material @emotion/react @emotion/styled
 // project import
-import AuthLogin from './auth-forms/AuthLogin';
+import AuthLogin from './auth-forms/AuthRegister';
 import AuthWrapper from './AuthWrapper';
-const Login = () => (
+const Register = () => (
   <AuthWrapper>
       <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -26,3 +26,5 @@ const Login = () => (
       </Grid>
   </AuthWrapper>
 );
+
+export default Register;
