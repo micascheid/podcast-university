@@ -7,6 +7,8 @@
 
 # firebase
 /src/FirebaseConfig.js
+firebase-debug.log
+firestore-debug.log
 
 # testing
 /coverage
