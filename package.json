@@ -13,6 +13,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "base2": "^1.0.18",
     "firebase": "^9.18.0",
     "firebaseui": "^6.0.2",
     "formik": "^2.2.9",
