@@ -86,10 +86,7 @@ const AuthRegister = () => {
                                 displayName: values.displayname, photoURL: ''
                             }).then(() => {
                                 setIsRegistering(true);
-                                setDoc(doc(db,`users/${user.uid}`), {quant_subscriptions: []})
-                                    .then(() => {
-                                        navigate('/dashboard/default');
-                                    })
+                                navigate('/dashboard/default');
                             })
                         })
                         .catch((error) => {
