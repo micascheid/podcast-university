@@ -2,6 +2,7 @@
   "name": "podcast-university",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://podcast-university.web.app/",
   "dependencies": {
     "@ant-design/colors": "^7.0.0",
     "@ant-design/icons": "^5.0.1",
