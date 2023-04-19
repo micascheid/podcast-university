@@ -86,7 +86,7 @@ const AuthRegister = () => {
                                 displayName: values.displayname, photoURL: ''
                             }).then(() => {
                                 setIsRegistering(true);
-                                navigate('/dashboard/default');
+                                navigate('/');
                             })
                         })
                         .catch((error) => {

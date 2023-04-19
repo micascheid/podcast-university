@@ -4,8 +4,14 @@ import {LoadingButton} from '@mui/lab';
 import { getFunctions, httpsCallable} from "firebase/functions";
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000';
+// const API_BASE_URL = 'http://0.0.0.0:8080';
+const API_BASE_URL = 'https://api.podcastsummary.io';
+// const API_BASE_URL = 'http://35.199.26.109';
 
+//p100
+// const API_BASE_URL = 'http://35.239.225.139';
+// const API_BASE_URL = 'http://localhost:8080';
+// 35.237.121.222
 const DefaultDashboard = () => {
     const [podLink, setPodLink] = useState('');
     const [isLink, setIsLink] = useState(false);
@@ -26,7 +32,7 @@ const DefaultDashboard = () => {
             podcastEpisodeLink: link,
             numBulletPoints:numBulletPoints
         };
-        axios.post("http://127.0.0.1:5000/get_summary", data)
+        axios.post(`${API_BASE_URL}/get_summary`, data)
             .then((response) => {
                 console.log("Episode Name: " +  response.data.transcription);
                 setSummary(response.data.transcription);

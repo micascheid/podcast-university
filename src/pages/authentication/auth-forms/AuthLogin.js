@@ -66,7 +66,7 @@ const AuthLogin = () => {
                     setIsLoggingIn(true);
                     signInWithEmailAndPassword(auth, values.email, values.password)
                         .then(() => {
-                            navigate('/dashboard/default')
+                            navigate('/');
                         })
                         .catch((error) => {
                             const errorCode = error.code;
