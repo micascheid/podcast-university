@@ -6,12 +6,12 @@ import axios from 'axios';
 
 // const API_BASE_URL = 'http://0.0.0.0:8080';
 const API_BASE_URL = 'https://api.podcastsummary.io';
-// const API_BASE_URL = 'http://35.199.26.109';
 
 //p100
-// const API_BASE_URL = 'http://35.239.225.139';
+// const API_BASE_URL = 'http://35.237.168.224';
 // const API_BASE_URL = 'http://localhost:8080';
 // 35.237.121.222
+// const API_BASE_URL = "http://35.186.191.21";
 const DefaultDashboard = () => {
     const [podLink, setPodLink] = useState('');
     const [isLink, setIsLink] = useState(false);
