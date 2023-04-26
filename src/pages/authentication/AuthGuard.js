@@ -12,6 +12,7 @@ const AuthGuard = (props) => {
         onAuthStateChanged(auth, (user) => {
             if (user){
                 setIsLoggedIn(true);
+
             } else {
                 navigate('/login');
             }

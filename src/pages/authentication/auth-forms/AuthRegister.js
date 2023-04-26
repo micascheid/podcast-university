@@ -33,7 +33,7 @@ import {EyeOutlined, EyeInvisibleOutlined} from '@ant-design/icons';
 // firebase auth
 import {getAuth, createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
 import {initializeApp} from "firebase/app";
-import {doc, setDoc} from "firebase/firestore";
+import {doc, setDoc } from "firebase/firestore";
 import {db, auth} from "../../../FirebaseConfig";
 
 // ============================|| FIREBASE - REGISTER ||============================ //
@@ -86,10 +86,8 @@ const AuthRegister = () => {
                                 displayName: values.displayname, photoURL: ''
                             }).then(() => {
                                 setIsRegistering(true);
-                                setDoc(doc(db,`users/${user.uid}`), {quant_subscriptions: []})
-                                    .then(() => {
-                                        navigate('/dashboard/default');
-                                    })
+                                setDoc(doc(db, `users/${user.uid}/`), {})
+                                navigate('/');
                             })
                         })
                         .catch((error) => {
