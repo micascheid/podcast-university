@@ -1,12 +1,13 @@
-import {Fragment, react, useState} from 'react';
+import {Fragment, react, useContext, useState} from 'react';
 import {Stack, TextField, Typography} from "@mui/material";
 import {LoadingButton} from "@mui/lab";
 import {API_URL} from '../../constants';
 import MainCard from "../../components/MainCard";
 import axios from "axios";
-import { auth } from '../../FirebaseConfig';
+import Cookies from 'js-cookie';
 
-
+//context
+import UserContext from '../../context/UserContext';
 const SummaryRequest = () => {
     // VARIABLE DECLARATIONS
     const [podLink, setPodLink] = useState('');
@@ -16,7 +17,8 @@ const SummaryRequest = () => {
     const [isActiveButton, setIsActiveButton] = useState(null);
     const [summary, setSummary] = useState('');
     const [helperText, setHelperText] = useState('');
-    const userId = auth.currentUser.uid;
+    const { user } = useContext(UserContext);
+
     // FUNCTIONS
     const handleTextChange = (event) => {
         const linkVal = event.target.value;
@@ -32,14 +34,28 @@ const SummaryRequest = () => {
         const pattern = /^https:\/\/podcasts\.apple\.com\/us\/podcast\//;
         const validLink = pattern.test(inputString);
 
-        if (validLink){
+        // Check if user is a cookie user and has <=5 total_uses
+        let total_uses = 0;
+        if (user.uid.indexOf("-") >= 0) {
+            total_uses = user.total_uses;
+        }
+
+        if (validLink && total_uses < 5){
             setError(false);
             setHelperText("Getting your summary!");
             console.log('summary requested');
-            getSummary(inputString, buttonId, userId);
-        } else {
+            getSummary(inputString, buttonId, user.uid);
+        } else if (total_uses >= 5){
+            console.log("LOOKS LIKE YOUR OUT OF USES!");
+            setError(true);
+            setHelperText("Looks like your out of uses, sign up to get more summaries!")
+            setIsSummarizing(false);
+            setIsActiveButton(null);
+        } else{
             setError(true);
             setHelperText("Please enter a valid Apple Podcast Link, Spotify coming soon!")
+            setIsSummarizing(false);
+            setIsActiveButton(null);
         }
     }
 
@@ -52,18 +68,24 @@ const SummaryRequest = () => {
         ))
     };
     const getSummary = async (link, numBulletPoints, userId) => {
-        console.log("trying summary for user... " + userId);
         const data = {
             podcastEpisodeLink: link,
             numBulletPoints:numBulletPoints,
             uid: userId
         };
+
         axios.post(`${API_URL}/get_summary`, data)
             .then((response) => {
                 console.log("Episode Name: " +  response.data.transcription);
                 setSummary(response.data.transcription);
                 setIsSummarizing(false);
                 setIsActiveButton(null);
+
+                // Add +=total_uses for non registered emails
+                if (user.email === "") {
+                    const total_uses = parseInt(Cookies.get('total_uses')) + 1;
+                    Cookies.set('total_uses', total_uses);
+                }
             })
             .catch((error) => {
                 console.log("Error:" + error);
@@ -109,7 +131,6 @@ const SummaryRequest = () => {
                                     disabled={isDisabled(buttonId)}>
                                     {buttonId + " Bullet Points"}
                                 </LoadingButton>
-
                             )
                         })
                     }

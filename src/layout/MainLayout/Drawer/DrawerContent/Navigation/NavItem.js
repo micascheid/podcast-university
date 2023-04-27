@@ -39,7 +39,6 @@ const NavItem = ({ item, level }) => {
 
     // active menu item on page load
     useEffect(() => {
-        console.log("to infinity and beyond");
         const currentIndex = document.location.pathname
             .toString()
             .split('/')

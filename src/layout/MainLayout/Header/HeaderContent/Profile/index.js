@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import {useEffect, useRef, useState} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -35,6 +35,9 @@ import { auth } from '../../../../../FirebaseConfig';
 import {DisabledByDefault} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 
+//context
+import UserContext from "../../../../../context/UserContext";
+
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
     return (
@@ -64,7 +67,7 @@ const Profile = () => {
     const theme = useTheme();
     const [profileName, setProfileName] = useState('');
     const [value, setValue] = useState(0);
-
+    const { logout } = useContext(UserContext);
     const auth = getAuth();
 
 
@@ -90,6 +93,7 @@ const Profile = () => {
     const handleLogout = async () => {
         // logout
         signOut(auth).then(() => {
+            logout();
             navigate('/login');
         }).catch((error) => {
             console.log("unable to sign user out", error);
@@ -98,7 +102,6 @@ const Profile = () => {
     };
 
     const iconBackColorOpen = 'grey.300';
-    let name = '';
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user){

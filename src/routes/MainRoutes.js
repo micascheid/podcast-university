@@ -23,9 +23,9 @@ const user = getAuth().currentUser;
 const MainRoutes = {
     path: '/',
     element: (
-        <AuthGuard user={user}>
+        // <AuthGuard user={user}>
             <MainLayout/>
-        </AuthGuard>
+        // </AuthGuard>
     ),
     children: [
         {
