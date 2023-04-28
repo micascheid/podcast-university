@@ -1,10 +1,9 @@
-import { React } from 'react';
+import {React, useState} from 'react';
 import { Grid } from "@mui/material";
 import SummaryHistory from "./SummaryHistory";
 import SummaryRequest from "./SummaryRequest";
 
 const DefaultDashboard = () => {
-
 
     return (
         <Grid container spacing={2}>

@@ -55,14 +55,6 @@ const App = () => {
       setUser(null);
     };
 
-    // const regUser = auth.currentUser;
-    // if (regUser !== undefined) {
-    //     console.log("User is Registered: " + regUser.email);
-    //     setUser(regUser);
-    // } else {
-    //     console.log("User is NOT Registered, it's cookie time");
-    // }
-
   return (
       <UserContext.Provider value={{user, login, logout}}>
           <ThemeCustomization>

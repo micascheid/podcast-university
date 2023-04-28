@@ -14,7 +14,7 @@ const SummaryItems = (props) => {
                      style={{
                          backgroundColor: index % 2 === 0 ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 1)',
                      }}>
-                    <Divider>Summary for {summaryItem.pod_name}</Divider>
+                    <Divider>Summary for: {summaryItem.pod_name}</Divider>
                     <SummaryItem summaryItem={summaryItem}/>
                 </MainCard>
             ))}

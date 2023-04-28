@@ -28,7 +28,7 @@ const SummaryHistory = () => {
                     if (change.type === 'added') {
                         const summaryObj = new SummaryObj(change.doc.data().pod_name, change.doc.data().summary);
                         setSummaryItems(prevState => [summaryObj, ...prevState]);
-                        console.log(change.doc.data().pod_name + "\n" + change.doc.data().summary);
+                        // console.log(change.doc.data().pod_name + "\n" + change.doc.data().summary);
                     }
                 });
             });
