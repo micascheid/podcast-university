@@ -19,16 +19,15 @@ const SummaryHistory = () => {
 
     // users(Collection)/User(doc)/summaries(Collection)/uid_summary(doc)
     useEffect(() => {
-        console.log("UID: " + userId);
         if (user){
-            const q = query(collection(db, `users/${userId}/summaries`));
+            const q = query(collection(db, `summaries`), where("uid", "==", `${user.uid}`));
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
-                console.log("GETTING CALLED IN SNAPSHOT: " + userId);
                 querySnapshot.docChanges().forEach((change) => {
                     if (change.type === 'added') {
-                        const summaryObj = new SummaryObj(change.doc.data().pod_name, change.doc.data().summary);
+                        const summaryObj = new SummaryObj(change.doc.data().pod_name, change.doc.data().summary,
+                            change.doc.data().summary_type);
+
                         setSummaryItems(prevState => [summaryObj, ...prevState]);
-                        // console.log(change.doc.data().pod_name + "\n" + change.doc.data().summary);
                     }
                 });
             });

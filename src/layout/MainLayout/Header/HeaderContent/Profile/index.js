@@ -26,7 +26,7 @@ import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
 
 // assets
-import avatar1 from 'assets/images/users/avatar-1.png';
+import avatar1 from 'assets/images/users/avatar-2.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 
 //firebase
@@ -67,7 +67,7 @@ const Profile = () => {
     const theme = useTheme();
     const [profileName, setProfileName] = useState('');
     const [value, setValue] = useState(0);
-    const { logout } = useContext(UserContext);
+    const { user, logout } = useContext(UserContext);
     const auth = getAuth();
 
 
@@ -92,13 +92,16 @@ const Profile = () => {
 
     const handleLogout = async () => {
         // logout
-        signOut(auth).then(() => {
-            logout();
-            navigate('/login');
-        }).catch((error) => {
-            console.log("unable to sign user out", error);
-        })
-
+        if (user.email === undefined) {
+            navigate('/register');
+        } else {
+            signOut(auth).then(() => {
+                logout();
+                navigate('/login');
+            }).catch((error) => {
+                console.log("Unable to sign the user out", error);
+            });
+        }
     };
 
     const iconBackColorOpen = 'grey.300';
@@ -175,7 +178,7 @@ const Profile = () => {
                                                         <Stack>
                                                             <Typography variant="h6">{profileName}</Typography>
                                                             <Typography variant="body2" color="textSecondary">
-                                                                UI/UX Designer
+                                                                Podcast Enthusiast
                                                             </Typography>
                                                         </Stack>
                                                     </Stack>

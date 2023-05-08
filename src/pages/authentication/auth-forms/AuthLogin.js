@@ -71,7 +71,6 @@ const AuthLogin = () => {
                         .catch((error) => {
                             const errorCode = error.code;
                             const errorMessage = error.message;
-                            console.log("error login message: ", errorMessage);
                             setStatus({success: false});
                             setErrors({submit: error.message});
                             setSubmitting(false);

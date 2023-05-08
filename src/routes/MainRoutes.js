@@ -4,8 +4,6 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
 import Support from '../pages/extra-pages/Support';
-import AuthGuard from '../pages/authentication/AuthGuard';
-import { getAuth } from 'firebase/auth';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
@@ -18,7 +16,6 @@ const SupportPage = Loadable(lazy(() => import('pages/extra-pages/Support')));
 
 // ==============================|| AUTH ROUTING - MAIN ROUTES ||============================== //
 
-const user = getAuth().currentUser;
 
 const MainRoutes = {
     path: '/',

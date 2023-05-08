@@ -41,7 +41,9 @@ const ModalRequestLimit = ({closeModal}) => {
         position: 'absolute',
         top: '50%',
         left: '50%',
-        transform: 'translate(-50%, -50%)'
+        transform: 'translate(-50%, -50%)',
+        maxHeight: '50vh',
+        overflowY: 'auto'
     }
     const paymentPlans = [
         {
@@ -109,7 +111,7 @@ const ModalRequestLimit = ({closeModal}) => {
 
     return (
         <Fragment>
-            {user.email === "" &&
+            {user.email === undefined &&
                 <Modal
                     open={open}
                     onClose={handleClose}
@@ -119,7 +121,7 @@ const ModalRequestLimit = ({closeModal}) => {
                             <Stack direction={"column"} alignItems={"center"}>
                                 {!emailSubmitted &&
                                     <>
-                                        <Typography variant={"h4"}>Currently we are in beta and can only provide 5 summaries.</Typography>
+                                        <Typography variant={"h4"}>Currently we are in beta and can only provide 3 summaries.</Typography>
                                         <Typography variant={"h4"}>Get notified when unlimited access is available!</Typography>
                                         <Formik
                                             initialValues={{
@@ -204,7 +206,7 @@ const ModalRequestLimit = ({closeModal}) => {
                     </MainCard>
                 </Modal>
             }
-            {user.email !== "" &&
+            {user.email !== undefined &&
                 <Modal
                     open={open}
                     onClose={handleClose}
@@ -221,6 +223,7 @@ const ModalRequestLimit = ({closeModal}) => {
                             <Stack alignItems={"center"}>
                                 <Typography textAlign={"center"} variant={"h4"}>We are excited to see you want more!</Typography>
                                 <Typography textAlign={"center"} variant={"h4"}>At this time we are still in beta, we will email you by mid May</Typography>
+                                <Button onClick={handleClose} variant="contained" color="primary">Exit</Button>
                             </Stack>
                         }
                     </MainCard>

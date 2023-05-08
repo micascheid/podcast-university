@@ -1,7 +1,8 @@
-import { react } from 'react';
-import {Box, Divider, Stack, Typography} from "@mui/material";
+import React from 'react';
+import {Box, Divider} from "@mui/material";
 import SummaryItem from "./SummaryItem";
 import MainCard from "../../components/MainCard";
+import Typography from "@mui/material/Typography";
 
 
 const SummaryItems = (props) => {
@@ -14,7 +15,20 @@ const SummaryItems = (props) => {
                      style={{
                          backgroundColor: index % 2 === 0 ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 1)',
                      }}>
-                    <Divider>Summary for: {summaryItem.pod_name}</Divider>
+                    <Box display="flex" alignItems="center" width="100%" justifyContent={"center"}>
+                        <Divider flexItem />
+                        <Box
+                            mx={1}
+                            component={Typography}
+                            variant="subtitle1"
+                            noWrap
+                            overflow="hidden"
+                            textOverflow="ellipsis"
+                        >
+                            Summary for: {summaryItem.pod_name}
+                        </Box>
+                        <Divider flexItem />
+                    </Box>
                     <SummaryItem summaryItem={summaryItem}/>
                 </MainCard>
             ))}

@@ -35,6 +35,7 @@ import {getAuth, createUserWithEmailAndPassword, updateProfile} from 'firebase/a
 import {initializeApp} from "firebase/app";
 import {doc, setDoc } from "firebase/firestore";
 import {db, auth} from "../../../FirebaseConfig";
+import {USER_INIT_OBJECT} from "../../../constants";
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
@@ -87,7 +88,7 @@ const AuthRegister = () => {
                             }).then( async () => {
                                 setIsRegistering(true);
                                 const userRef = doc(db, `users/${user.uid}`);
-                                await setDoc(userRef, {total_uses: 0});
+                                await setDoc(userRef, USER_INIT_OBJECT);
                                 navigate('/');
                             })
                         })
