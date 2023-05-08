@@ -9,6 +9,7 @@ import SummaryItems from "./SummaryItems";
 
 //context
 import UserContext from '../../context/UserContext';
+import ComingSoon from "./ComingSoon";
 const SummaryHistory = () => {
     const [summaryItems, setSummaryItems] = useState([]);
     const { user } = useContext(UserContext);

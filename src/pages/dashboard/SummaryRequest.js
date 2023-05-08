@@ -1,5 +1,5 @@
 import {Fragment, useContext, useEffect, useState} from 'react';
-import {Button, Stack, TextField, Typography} from "@mui/material";
+import {Button, Card, Stack, TextField, Typography} from "@mui/material";
 import {LoadingButton} from "@mui/lab";
 import {API_URL} from '../../constants';
 import MainCard from "../../components/MainCard";
@@ -12,15 +12,15 @@ import {db} from "../../FirebaseConfig";
 import { doc, getDoc, updateDoc, increment } from "firebase/firestore";
 import ResultsTime from "./ResultsTime";
 import CircularProgress from "@mui/material/CircularProgress";
+import ComingSoon from "./ComingSoon";
+import Box from "@mui/material/Box";
 
 const SummaryRequest = () => {
     // VARIABLE DECLARATIONS
     const [podLink, setPodLink] = useState('');
     const [isLink, setIsLink] = useState(false);
     const [error, setError] = useState(false);
-    // const [isSummarizing, setIsSummarizing] = useState(false);
-    // const [isActiveButton, setIsActiveButton] = useState(null);
-    const [summary, setSummary] = useState('');
+    const [summary, setSummary] = useState('Enter a podcast above to get started!');
     const [helperText, setHelperText] = useState('');
     const [limitReachedNot, setLimitReachedNot] = useState(false);
     const [isRequestingSummary, setIsRequestingSummary] = useState(false);
@@ -68,8 +68,6 @@ const SummaryRequest = () => {
             } else{
                 setError(true);
                 setHelperText("Please enter a valid Apple Podcast Link, Spotify coming soon!")
-                // setIsSummarizing(false);
-                // setIsActiveButton(null);
                 setIsRequestingSummary(false);
             }
         }).catch((error) => {
@@ -104,9 +102,8 @@ const SummaryRequest = () => {
         setHelperText("Your summary is on its way!");
         await axios.post(`${API_URL}/get_summary`, data)
             .then((response) => {
+                console.log()
                 setSummary(response.data.transcription);
-                // setIsSummarizing(false);
-                // setIsActiveButton(null);
                 setIsRequestingSummary(false);
                 setHelperText(null);
             }).then(() => {
@@ -117,24 +114,18 @@ const SummaryRequest = () => {
             })
             .catch((error) => {
                 if (axios.isCancel(error)){
-                    setHelperText("CANCELED");
+                    setHelperText("Canceled");
+                    setError(true);
                 }
-                console.log("Error:" + error);
-                // setIsSummarizing(false);
-                // setIsActiveButton(null);
+                console.log("Error on Request:" + error);
+                setHelperText("We are having trouble processing the podcast. Try again later or try a different podcast.");
                 setIsRequestingSummary(false);
-                // setSummary("We've run into a problem getting your summary");
+                setError(true);
+                updateDoc(userRef, {
+                    requesting: false
+                });
             });
     };
-
-    // const isDisabled = (buttonId) => {
-    //     if (!isLink){
-    //         return true;
-    //     } else {
-    //         return isActiveButton !== null && isActiveButton !== buttonId;
-    //     }
-    // };
-
 
     useEffect(() => {
         const fetchUserMeta = async () => {
@@ -169,7 +160,6 @@ const SummaryRequest = () => {
                     {
                         Array.from({length: 3}, (_, index) => {
                             const buttonId = index + 3;
-                            // const isLoading = isSummarizing && isActiveButton === buttonId;
                             return (
                                 <Button
                                     key={buttonId}
@@ -187,12 +177,15 @@ const SummaryRequest = () => {
                         <Typography variant={"h2"}>Summary on the way!</Typography>
                         <CircularProgress />
                     </Stack>
-
                 }
-                <Typography variant={"h6"}>{newlineToBreak(summary)}</Typography>
+                <MainCard sx={{ backgroundColor: 'rgba(255, 255, 255, 255)'}}>
+                    <Typography variant={"h4"}>Latest</Typography>
+                    <Typography variant={"h6"}>{newlineToBreak(summary)}</Typography>
+                </MainCard>
                 {limitReachedNot &&
                 <ModalRequestLimit closeModal={setLimitReachedNotHandler}/>
                 }
+                <ComingSoon />
             </Stack>
         </MainCard>
     )

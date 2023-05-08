@@ -1,15 +1,12 @@
 
 
 // Production
-// export const API_URL = 'https://api.podcastsummary.io';
+export const API_URL = 'https://api.podcastuniversity.io';
 
 // local config
-export const TEST_LOCAL = "127.0.0.1";
-export const API_URL = `http://${TEST_LOCAL}:5000`;
+// export const TEST_LOCAL = "127.0.0.1";
+// export const API_URL = `http://${TEST_LOCAL}:5000`;
 
-
-// export const API_URL = "http://192.168.200.30:5001";
-// export const API_URL = "http://35.193.22.174"
 
 export const USER_INIT_OBJECT = {
     total_uses: 0,
