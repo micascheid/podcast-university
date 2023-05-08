@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import {useEffect, useRef, useState} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -26,7 +26,7 @@ import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
 
 // assets
-import avatar1 from 'assets/images/users/avatar-1.png';
+import avatar1 from 'assets/images/users/avatar-2.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 
 //firebase
@@ -34,6 +34,9 @@ import {getAuth, onAuthStateChanged, signOut} from "firebase/auth";
 import { auth } from '../../../../../FirebaseConfig';
 import {DisabledByDefault} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
+
+//context
+import UserContext from "../../../../../context/UserContext";
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -64,7 +67,7 @@ const Profile = () => {
     const theme = useTheme();
     const [profileName, setProfileName] = useState('');
     const [value, setValue] = useState(0);
-
+    const { user, logout } = useContext(UserContext);
     const auth = getAuth();
 
 
@@ -89,16 +92,19 @@ const Profile = () => {
 
     const handleLogout = async () => {
         // logout
-        signOut(auth).then(() => {
-            navigate('/login');
-        }).catch((error) => {
-            console.log("unable to sign user out", error);
-        })
-
+        if (user.email === undefined) {
+            navigate('/register');
+        } else {
+            signOut(auth).then(() => {
+                logout();
+                navigate('/login');
+            }).catch((error) => {
+                console.log("Unable to sign the user out", error);
+            });
+        }
     };
 
     const iconBackColorOpen = 'grey.300';
-    let name = '';
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user){
@@ -172,7 +178,7 @@ const Profile = () => {
                                                         <Stack>
                                                             <Typography variant="h6">{profileName}</Typography>
                                                             <Typography variant="body2" color="textSecondary">
-                                                                UI/UX Designer
+                                                                Podcast Enthusiast
                                                             </Typography>
                                                         </Stack>
                                                     </Stack>

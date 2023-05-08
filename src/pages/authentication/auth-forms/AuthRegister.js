@@ -35,6 +35,7 @@ import {getAuth, createUserWithEmailAndPassword, updateProfile} from 'firebase/a
 import {initializeApp} from "firebase/app";
 import {doc, setDoc } from "firebase/firestore";
 import {db, auth} from "../../../FirebaseConfig";
+import {USER_INIT_OBJECT} from "../../../constants";
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
@@ -84,9 +85,10 @@ const AuthRegister = () => {
                             const user = userCredential.user;
                             updateProfile(user, {
                                 displayName: values.displayname, photoURL: ''
-                            }).then(() => {
+                            }).then( async () => {
                                 setIsRegistering(true);
-                                setDoc(doc(db, `users/${user.uid}/`), {})
+                                const userRef = doc(db, `users/${user.uid}`);
+                                await setDoc(userRef, USER_INIT_OBJECT);
                                 navigate('/');
                             })
                         })
@@ -100,7 +102,6 @@ const AuthRegister = () => {
                             setSubmitting(false);
                             setIsRegistering(false);
                         })
-
                 }
                 }
             >
@@ -140,7 +141,7 @@ const AuthRegister = () => {
                                         name="email"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        placeholder="demo@company.com"
+                                        placeholder="coolemail@coolemail.com"
                                         inputProps={{}}
                                     />
                                     {touched.email && errors.email && (

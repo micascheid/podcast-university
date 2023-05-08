@@ -8,7 +8,7 @@ import MainCard from 'components/MainCard';
 
 // ==============================|| AUTHENTICATION - CARD WRAPPER ||============================== //
 
-const AuthCard = ({ children, ...other }) => (
+const AuthCard = ({ children, theme, ...other }) => (
     <MainCard
         sx={{
             maxWidth: { xs: 400, lg: 475 },
@@ -22,14 +22,15 @@ const AuthCard = ({ children, ...other }) => (
         {...other}
         border={false}
         boxShadow
-        shadow={(theme) => theme.customShadows.z1}
+        shadow={theme.customShadows.z1}
     >
         <Box sx={{ p: { xs: 2, sm: 3, md: 4, xl: 5 } }}>{children}</Box>
     </MainCard>
 );
 
 AuthCard.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
+    theme: PropTypes.object
 };
 
 export default AuthCard;

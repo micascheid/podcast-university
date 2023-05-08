@@ -1,6 +1,6 @@
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import logodrawer from 'assets/images/logodrawer.png';
+import logodrawer from 'assets/images/podcast_summary_circle.png';
 /**
  * if you want to use image instead of <svg> uncomment following.
  *

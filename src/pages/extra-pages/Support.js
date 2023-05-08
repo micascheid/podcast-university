@@ -13,15 +13,15 @@ const Support = () => (
                 Email:
             </Typography>
             <Typography variant="h6">
-                micascheid@gmail.com
+                podcastuniversity.ml@gmail.com
             </Typography>
         </Stack>
         <Stack direction={"row"} spacing={2}>
             <Typography variant="h6">
-                Telegram:
+                Twitter:
             </Typography>
             <Typography variant="h6">
-                @micascheid
+                @micalinscheid
             </Typography>
         </Stack>
         <Divider sx={{width: '100%'}}/>

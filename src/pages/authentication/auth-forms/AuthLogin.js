@@ -1,12 +1,9 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 
 // material-ui
 import {
     Button,
-    Checkbox,
-    Divider,
-    FormControlLabel,
     FormHelperText,
     Grid,
     Link,
@@ -15,7 +12,6 @@ import {
     InputLabel,
     OutlinedInput,
     Stack,
-    Typography
 } from '@mui/material';
 
 // third party
@@ -33,14 +29,17 @@ import {EyeOutlined, EyeInvisibleOutlined} from '@ant-design/icons';
 import {getAuth, signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
 import {auth} from '../../../FirebaseConfig';
 
+//context
+import UserContext from '../../../context/UserContext';
+
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const AuthLogin = () => {
     const navigate = useNavigate();
     const [checked, setChecked] = React.useState(false);
     const [isLoggingIn, setIsLoggingIn] = useState(false);
-
     const [showPassword, setShowPassword] = React.useState(false);
+    const { login } = useContext(UserContext);
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -66,12 +65,12 @@ const AuthLogin = () => {
                     setIsLoggingIn(true);
                     signInWithEmailAndPassword(auth, values.email, values.password)
                         .then(() => {
+                            login(auth.currentUser);
                             navigate('/');
                         })
                         .catch((error) => {
                             const errorCode = error.code;
                             const errorMessage = error.message;
-                            console.log("error login message: ", errorMessage);
                             setStatus({success: false});
                             setErrors({submit: error.message});
                             setSubmitting(false);
