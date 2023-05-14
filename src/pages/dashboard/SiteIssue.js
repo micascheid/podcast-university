@@ -22,7 +22,7 @@ const SiteIssue = () => {
                 <Stack spacing={1}>
                     <Typography variant="body1">
                         <Box component="span" display="inline-block" width={24}>1.) </Box>
-                        This site requires the use of cookies in order to monitor how we build notes and summaries tailored specifically for you. Please enable cookies for this site to run.
+                        This site requires the use of cookies in order to monitor how we build notes tailored specifically for you. Please enable cookies for this site to run.
                     </Typography>
                     <Typography variant="body1">
                         <Box component="span" display="inline-block" width={24}>2.)</Box>

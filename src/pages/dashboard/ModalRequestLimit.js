@@ -29,15 +29,8 @@ const ModalRequestLimit = ({closeModal}) => {
         closeModal();
     }
 
-    const styleNonReg = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)'
-    }
-
     const styleReg = {
-        width: '75%',
+        width: 'auto',
         position: 'absolute',
         top: '50%',
         left: '50%',
@@ -49,17 +42,17 @@ const ModalRequestLimit = ({closeModal}) => {
         {
             title: 'Basic',
             price: '$5',
-            features: ['50 Summaries a month'],
+            features: ['50 notes a month'],
         },
         {
             title: 'Pro',
             price: '$15',
-            features: ['Unlimited Summaries'],
+            features: ['Unlimited notes'],
         },
         {
             title: 'Enterprise',
             price: '$90',
-            features: ['Unlimited summaries for all users', 'Unlimited member accounts'],
+            features: ['Unlimited notes for all users', 'Unlimited member accounts'],
         },
     ];
 
@@ -96,6 +89,84 @@ const ModalRequestLimit = ({closeModal}) => {
         );
     };
 
+    const renderEmailSubmission = () => {
+        return (
+            <>
+                <Typography variant={"h6"}>Get notified when more options are available or choose a monthly plan below</Typography>
+                <Formik
+                    initialValues={{
+                        email: '',
+                        submit: null
+                    }}
+                    validationSchema={Yup.object().shape({
+                        email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+                    })}
+                    onSubmit={async (values, {setErrors, setStatus, setSubmitting}) => {
+                        // setStatus({success: false});
+                        setSubmitting(false);
+                        // Add DB logic here with emails
+                        saveEmail(values.email).then(() => {
+                            setStatus({success: true});
+                            setEmailSubmitted(true);
+                        }).catch((error) => {
+                            setStatus({success: true});
+                        })
+                    }
+                    }
+                >
+                    {({errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values}) => (
+                        <form noValidate onSubmit={handleSubmit}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12}>
+                                    <Stack spacing={1}>
+                                        <InputLabel htmlFor="email-signup"></InputLabel>
+                                        <OutlinedInput
+                                            fullWidth
+                                            error={Boolean(touched.email && errors.email)}
+                                            id="email-login"
+                                            type="email"
+                                            value={values.email}
+                                            name="email"
+                                            onBlur={handleBlur}
+                                            onChange={handleChange}
+                                            placeholder="Enter Email"
+                                            inputProps={{}}
+                                        />
+                                        {touched.email && errors.email && (
+                                            <FormHelperText error id="helper-text-email-signup">
+                                                {errors.email}
+                                            </FormHelperText>
+                                        )}
+                                    </Stack>
+                                </Grid>
+                                {errors.submit && (
+                                    <Grid item xs={12}>
+                                        <FormHelperText error>{errors.submit}</FormHelperText>
+                                    </Grid>
+                                )}
+                                <Grid item xs={12}>
+                                    <AnimateButton>
+                                        <Button
+                                            disableElevation
+                                            // disabled={Boolean(touched.email)}
+                                            fullWidth
+                                            size="large"
+                                            type="submit"
+                                            variant="contained"
+                                            color="primary"
+                                        >
+                                            Get Notified!
+                                        </Button>
+                                    </AnimateButton>
+                                </Grid>
+                            </Grid>
+                        </form>
+                    )}
+                </Formik>
+            </>
+        );
+    };
+
     const saveEmail = async (email) => {
         try {
             await addDoc(collection(db, "signup_emails"), {
@@ -111,128 +182,61 @@ const ModalRequestLimit = ({closeModal}) => {
 
     return (
         <Fragment>
-            {user.email === undefined &&
                 <Modal
                     open={open}
                     onClose={handleClose}
                 >
-                    <MainCard sx={styleNonReg}>
-                        <Box display={"flex"} justifyContent={"center"}>
-                            <Stack direction={"column"} alignItems={"center"}>
+                    <MainCard sx={styleReg}>
+                        {!chosenPlan &&
+                            <Box>
                                 {!emailSubmitted &&
                                     <>
-                                        <Typography variant={"h4"}>Currently we are in beta and can only provide 3 summaries.</Typography>
-                                        <Typography variant={"h4"}>Get notified when unlimited access is available!</Typography>
-                                        <Formik
-                                            initialValues={{
-                                                email: '',
-                                                submit: null
-                                            }}
-                                            validationSchema={Yup.object().shape({
-                                                email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                                            })}
-                                            onSubmit={async (values, {setErrors, setStatus, setSubmitting}) => {
-                                                // setStatus({success: false});
-                                                setSubmitting(false);
-                                                // Add DB logic here with emails
-                                                saveEmail(values.email).then(() => {
-                                                    setStatus({success: true});
-                                                    setEmailSubmitted(true);
-                                                }).catch((error) => {
-                                                    setStatus({success: true});
-                                                })
-                                            }
-                                            }
-                                        >
-                                            {({errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values}) => (
-                                                <form noValidate onSubmit={handleSubmit}>
-                                                    <Grid container spacing={3}>
-                                                        <Grid item xs={12}>
-                                                            <Stack spacing={1}>
-                                                                <InputLabel htmlFor="email-signup"></InputLabel>
-                                                                <OutlinedInput
-                                                                    fullWidth
-                                                                    error={Boolean(touched.email && errors.email)}
-                                                                    id="email-login"
-                                                                    type="email"
-                                                                    value={values.email}
-                                                                    name="email"
-                                                                    onBlur={handleBlur}
-                                                                    onChange={handleChange}
-                                                                    placeholder="Enter Email"
-                                                                    inputProps={{}}
-                                                                />
-                                                                {touched.email && errors.email && (
-                                                                    <FormHelperText error id="helper-text-email-signup">
-                                                                        {errors.email}
-                                                                    </FormHelperText>
-                                                                )}
-                                                            </Stack>
-                                                        </Grid>
-                                                        {errors.submit && (
-                                                            <Grid item xs={12}>
-                                                                <FormHelperText error>{errors.submit}</FormHelperText>
-                                                            </Grid>
-                                                        )}
-                                                        <Grid item xs={12}>
-                                                            <AnimateButton>
-                                                                <Button
-                                                                    disableElevation
-                                                                    // disabled={Boolean(touched.email)}
-                                                                    fullWidth
-                                                                    size="large"
-                                                                    type="submit"
-                                                                    variant="contained"
-                                                                    color="primary"
-                                                                >
-                                                                    Get Notified!
-                                                                </Button>
-                                                            </AnimateButton>
-                                                        </Grid>
-                                                    </Grid>
-                                                </form>
-                                            )}
-                                        </Formik>
+                                        <Typography textAlign={"center"} variant={"h4"}> We are excited to see you want more!</Typography>
+                                        <Stack alignItems={"center"}>
+                                            <Typography textAlign={"center"} variant={"h6"}>At this time we are still in beta and can only provide limited use</Typography>
+                                        </Stack>
                                     </>
                                 }
+                                <Box display={"flex"} justifyContent={"center"}>
+                                    <Stack direction={"column"} alignItems={"center"}>
+                                        {!emailSubmitted &&
+                                            <>
+                                            {renderEmailSubmission()}
+                                            </>
+                                        }
+                                        <Typography id="payment-plans-modal-title" variant="h5" component="h2">
+                                            Choose a Monthly Payment Plan
+                                        </Typography>
+                                        <Grid container spacing={2} style={{ marginTop: 16 }}>
+                                            {renderPaymentPlans()}
+                                        </Grid>
+                                    </Stack>
+                                </Box>
+                            </Box>
+                        }
+                        {chosenPlan &&
+                            <>
                                 {emailSubmitted &&
                                     <Stack alignItems={"center"}>
-                                        <Typography variant={"h4"}>Thanks for signing up!</Typography>
+                                        <Typography variant={"h4"}>Thanks for choosing a plan!</Typography>
                                         <Typography variant={"h4"}>We'll notify you when ready!</Typography>
+                                        <Button onClick={handleClose} variant="contained" color="primary">Exit</Button>
                                     </Stack>
                                 }
-                            </Stack>
-                        </Box>
-                    </MainCard>
-                </Modal>
-            }
-            {user.email !== undefined &&
-                <Modal
-                    open={open}
-                    onClose={handleClose}
-                    >
-                    <MainCard sx={styleReg}>
-                        <Typography textAlign={"center"} variant={"h4"}>Unfortunately we can only provide 5 free summaries</Typography>
-                        <Typography id="payment-plans-modal-title" variant="h5" component="h2">
-                            Choose a Monthly Payment Plan
-                        </Typography>
-                        <Grid container spacing={2} style={{ marginTop: 16 }}>
-                            {renderPaymentPlans()}
-                        </Grid>
-                        {chosenPlan &&
-                            <Stack alignItems={"center"}>
-                                <Typography textAlign={"center"} variant={"h4"}>We are excited to see you want more!</Typography>
-                                <Typography textAlign={"center"} variant={"h4"}>At this time we are still in beta, we will email you by mid May</Typography>
-                                <Button onClick={handleClose} variant="contained" color="primary">Exit</Button>
-                            </Stack>
+                                {!emailSubmitted &&
+                                    <Stack alignItems={"center"} spacing={2}>
+                                        <Typography variant={"h4"}>Thanks for choosing a plan!</Typography>
+                                        <Typography variant={"h4"}>Enter email below to be notified when we are ready!</Typography>
+                                        {renderEmailSubmission()}
+                                        <Button onClick={handleClose} variant="contained" color="primary">Exit</Button>
+                                    </Stack>
+                                }
+                            </>
                         }
                     </MainCard>
                 </Modal>
-            }
-
         </Fragment>
-
-    )
+    );
 };
 
 export default ModalRequestLimit;

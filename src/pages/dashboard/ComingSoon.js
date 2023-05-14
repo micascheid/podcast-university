@@ -8,13 +8,12 @@ const ComingSoon = () => {
 
     return (
         <MainCard>
-            <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                <Typography variant="h5" component="span">
+            <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center'}}>
+                <Typography sx={{paddingRight: 1}} variant="h5" component="span">
                     Custom Note Request:
                 </Typography>
                 <Typography variant="body1" component="span">
-                    {' '}
-                    Below you will be able to ask what information you would like back from the podcast.
+                    {' '} Below you will be able to ask what information you would like back from the podcast.
                 </Typography>
             </Box>
 

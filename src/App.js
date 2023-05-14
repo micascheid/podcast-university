@@ -33,7 +33,6 @@ const App = () => {
                     setIsFailedToLoad(false);
                     setLoadingUser(false);
                 }).catch((error) => {
-                    console.log("GettCookieUserError: ", error);
                     setIsFailedToLoad(true);
                     setLoadingUser(true);
                 });

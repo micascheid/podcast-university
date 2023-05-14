@@ -25,7 +25,7 @@ const SummaryItems = (props) => {
                             overflow="hidden"
                             textOverflow="ellipsis"
                         >
-                            Summary for: {summaryItem.pod_name}
+                            Notes for: {summaryItem.pod_name}
                         </Box>
                         <Divider flexItem />
                     </Box>

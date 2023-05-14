@@ -47,7 +47,7 @@ const ResultsTime =() => {
                     component="div"
                     textAlign={"center"}
                 >
-                    Time Table for New Podcast Summaries
+                    Time Table for New Podcast Notes
                 </Typography>
             </Stack>
 
@@ -88,7 +88,7 @@ const ResultsTime =() => {
                 component="div"
                 textAlign={"center"}
             >
-                Summary variations for the same podcast take around 10secs
+                Note variations for the same podcast take around 10-20secs
             </Typography>
         </TableContainer>
     );

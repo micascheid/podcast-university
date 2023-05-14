@@ -18,7 +18,8 @@ import Box from "@mui/material/Box";
 const SummaryRequest = () => {
     // VARIABLE DECLARATIONS
     const [podLink, setPodLink] = useState('');
-    const [isLink, setIsLink] = useState(false);
+    // const [isLink, setIsLink] = useState(false);
+    const [isCheckingLink, setIsCheckingLink] = useState(false);
     const [error, setError] = useState(false);
     const [summary, setSummary] = useState('Enter a podcast above to get started!');
     const [helperText, setHelperText] = useState('');
@@ -29,7 +30,6 @@ const SummaryRequest = () => {
     // FUNCTIONS
     const handleTextChange = (event) => {
         const linkVal = event.target.value;
-        setIsLink(!!linkVal);
         setPodLink(linkVal);
     }
 
@@ -46,14 +46,12 @@ const SummaryRequest = () => {
     };
 
     const linkSubmitHandler = async (buttonId) => {
-        // setIsActiveButton(buttonId);
-        // setIsSummarizing(buttonId);
-        setIsRequestingSummary(true);
         const inputString = podLink;
-        const pattern = /^https:\/\/podcasts\.apple\.com\/us\/podcast\//;
-        const validLink = pattern.test(inputString);
+        // const pattern = /^https:\/\/podcasts\.apple\.com\/us\/podcast\//;
+        // const validLink = pattern.test(inputString);
 
-        // Check if user is a cookie user and has <=5 total_uses
+        const validLink = applePodcastLinkCheck(inputString);
+        // Check if user has <=3 total_uses
         await getUserTotalUses(user).then((total_uses) => {
             if (validLink && total_uses < 3){
                 setError(false);
@@ -61,14 +59,12 @@ const SummaryRequest = () => {
             } else if (total_uses >= 3){
                 setLimitReachedNot(true);
                 setError(true);
-                setHelperText("Looks like your out of uses, sign up to get more summaries!")
-                // setIsSummarizing(false);
-                // setIsActiveButton(null);
-                setIsRequestingSummary(false);
+                setHelperText("Looks like your out of uses, sign up to get more notes!")
+                // setIsRequestingSummary(false);
             } else{
                 setError(true);
-                setHelperText("Please enter a valid Apple Podcast Link, Spotify coming soon!")
-                setIsRequestingSummary(false);
+                setHelperText("Please enter a valid Apple Podcast Link or try again, Spotify coming soon!")
+                // setIsRequestingSummary(false);
             }
         }).catch((error) => {
             console.log("Error with link submission: ", error);
@@ -88,10 +84,16 @@ const SummaryRequest = () => {
             </Fragment>
         ))
     };
+
+    const applePodcastLinkCheck = (link) => {
+        const pattern = /^https:\/\/podcasts\.apple\.com\/[a-z]{2}\/podcast\/.*\D(\d{13})$/;
+        return pattern.test(link);
+    };
     const getSummary = async (link, numBulletPoints) => {
         await updateDoc(userRef, {
             requesting: true
         }).catch((error) => {
+            setIsRequestingSummary(false);
             setHelperText("It appears we are experiencing troubles. Please try again at a later time.");
         });
         const data = {
@@ -99,7 +101,8 @@ const SummaryRequest = () => {
             numBulletPoints:numBulletPoints,
             uid: user.uid
         };
-        setHelperText("Your summary is on its way!");
+        setIsRequestingSummary(true);
+        setHelperText('');
         await axios.post(`${API_URL}/get_summary`, data)
             .then((response) => {
                 console.log()
@@ -113,17 +116,19 @@ const SummaryRequest = () => {
                 });
             })
             .catch((error) => {
-                if (axios.isCancel(error)){
-                    setHelperText("Canceled");
-                    setError(true);
+                if (error.response) {
+                    if (error.response.data.description === "podlink") {
+                        setHelperText("Check your Apple Podcast Link and try again. This episode may be incompatible at this time.");
+                    }
+                    if (error.response.data.description === "bulletpoints") {
+                        setHelperText("We are having issues on our end. Our apologies please try another podcast");
+                    }
                 }
-                console.log("Error on Request:" + error);
-                setHelperText("We are having trouble processing the podcast. Try again later or try a different podcast.");
-                setIsRequestingSummary(false);
-                setError(true);
                 updateDoc(userRef, {
                     requesting: false
                 });
+                setIsRequestingSummary(false);
+                setError(true);
             });
     };
 
@@ -131,7 +136,6 @@ const SummaryRequest = () => {
         const fetchUserMeta = async () => {
             const userDocMeta = await getDoc(userRef);
             if (userDocMeta.exists()) {
-                console.log("requesting: ", userDocMeta.data().requesting);
                 setIsRequestingSummary(userDocMeta.data().requesting);
             }
         };
@@ -139,7 +143,7 @@ const SummaryRequest = () => {
         if (user.uid) {
             fetchUserMeta();
         }
-    });
+    }, []);
 
 
     return (
@@ -165,7 +169,7 @@ const SummaryRequest = () => {
                                     key={buttonId}
                                     variant={"contained"}
                                     onClick={() => linkSubmitHandler(buttonId)}
-                                    disabled={isRequestingSummary}>
+                                    disabled={isCheckingLink || isRequestingSummary}>
                                     {buttonId + " Bullet Points"}
                                 </Button>
                             )

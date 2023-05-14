@@ -15,7 +15,7 @@ const SummaryItem = (props) => {
 
     return (
         <Box>
-            <Typography>Summary Type: {props.summaryItem.summary_type} bullet points</Typography>
+            <Typography>Note Type: {props.summaryItem.summary_type} bullet points</Typography>
             <Typography>{newlineToBreak(props.summaryItem.summary)}</Typography>
         </Box>
     );
